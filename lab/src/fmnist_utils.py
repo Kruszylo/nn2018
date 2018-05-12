@@ -67,6 +67,7 @@ def step(model, loss, optimizer, x_val, y_val):
     y = Variable(y_val, requires_grad=False)
 
     is_cuda = torch.cuda.is_available()
+    is_cuda = False #broot force power off
     if is_cuda:
         x = x.cuda()
         y = y.cuda()
@@ -89,6 +90,7 @@ def step(model, loss, optimizer, x_val, y_val):
 def predict(model, x_val):
     x = Variable(x_val, requires_grad=False)
     is_cuda = torch.cuda.is_available()
+    is_cuda = False # broot force power off
     if is_cuda:
         x = x.cuda()
         

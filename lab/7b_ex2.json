@@ -1,0 +1,1 @@
+{"a": "On less than 120 epochs the best pair of BS and LR was 50,0.07 and 30,0.03", "b": "Yes, cause again small BS allows to train parametres with better precision, that produce larger dispercion, meanwhile lr speed up train process ", "c": "not defined"}
