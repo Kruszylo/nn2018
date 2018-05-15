@@ -1,0 +1,1 @@
+{"a": "without BN and with LR = 1.0 result was about 0.3", "b": "with BN and with LR = 1.0 result about 0.8", "c": "defenetly yes, with hight LR network with RN works better than network without BN and oppositely network with BN gives low result when LR is low, in same time network without BN and low LR gives hight result"}
