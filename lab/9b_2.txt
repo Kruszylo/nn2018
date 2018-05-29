@@ -1,0 +1,8 @@
+Ex.1 
+With padding = 0 Convolution got result .952, when MPL achieve only .857
+That says conv is better.
+
+Ex. 2
+
+-At the beginning, pixelation is observed, the colors change sharply within the same filter. By the simplicity of several epochs, sharpness is smoothed out and the general picture becomes more blurred. 
+-On 12 epoch I would say that filters are stabalizing.
