@@ -91,45 +91,45 @@ class RNN(nn.Module):
 
     def initHidden(self, batch_size):
         return Variable(torch.zeros(batch_size, self.hidden_size))
-#rnn = RNN(28, 64, 10)
-#optimizer = torch.optim.Adam(rnn.parameters(), lr=LR)   # optimize all cnn parameters
-#loss_func = nn.CrossEntropyLoss()
-## training and testing
-#H = {"acc": []}
-#EPOCH = 0
-#for epoch in range(EPOCH):
-#    for step, (x, y) in enumerate(train_loader):        # gives batch data
-#        b_x = Variable(x.view(-1, 28, 28))              # reshape x to (batch, time_step, input_size)
-#        b_y = Variable(y)                               # batch y
-#                
-#        hidden = rnn.initHidden(b_x.size()[0])
-#        for i in range(b_x.size()[1]): # Hint: iterate through all the steps
-#            output, hidden = rnn.forward(b_x[:,i,:], hidden) # Hint: just apply forward from the model
-#        loss = loss_func(output, b_y)
-#        optimizer.zero_grad()                           # clear gradients for this training step
-#        loss.backward()                                 # backpropagation, compute gradients
-#        optimizer.step()                                # apply gradients
-#
-#        if step % 50 == 0:
-#            hidden = rnn.initHidden(test_x.size()[0])
-#            for i in range(test_x.size()[1]):
-#                test_output, hidden = rnn(test_x[:, i], hidden)
-#            pred_y = torch.max(test_output, 1)[1].data.numpy().squeeze()
-#            accuracy = sum(pred_y == test_y.reshape(-1,)) / float(test_y.size)
-#            H['acc'].append(accuracy)
-#            print('Epoch: ', epoch + step*len(b_x)/2000., '| train loss: %.4f' % loss.data[0], '| test accuracy: %.2f' % accuracy)
-#            
-#plt.title("Simple(0.01)")
-#plt.plot(H['acc'])
-#plt.xlabel("Epoch")
-#plt.ylabel("Training accuracy")
-#plt.savefig("10a_1.png")
-#thidden = rnn.initHidden(test_x.size()[0])
-#for i in range(test_x.size()[1]):
-#    ttest_output, thidden = rnn(test_x[:, i], thidden)
-#pred_y = torch.max(ttest_output, 1)[1].data.numpy().squeeze()
-#print(pred_y, 'prediction number')
-#print(test_y[:10], 'real number')
+rnn = RNN(28, 64, 10)
+optimizer = torch.optim.Adam(rnn.parameters(), lr=LR)   # optimize all cnn parameters
+loss_func = nn.CrossEntropyLoss()
+# training and testing
+H = {"acc": []}
+EPOCH = 0
+for epoch in range(EPOCH):
+    for step, (x, y) in enumerate(train_loader):        # gives batch data
+        b_x = Variable(x.view(-1, 28, 28))              # reshape x to (batch, time_step, input_size)
+        b_y = Variable(y)                               # batch y
+                
+        hidden = rnn.initHidden(b_x.size()[0])
+        for i in range(b_x.size()[1]): # Hint: iterate through all the steps
+            output, hidden = rnn.forward(b_x[:,i,:], hidden) # Hint: just apply forward from the model
+        loss = loss_func(output, b_y)
+        optimizer.zero_grad()                           # clear gradients for this training step
+        loss.backward()                                 # backpropagation, compute gradients
+        optimizer.step()                                # apply gradients
+
+        if step % 50 == 0:
+            hidden = rnn.initHidden(test_x.size()[0])
+            for i in range(test_x.size()[1]):
+                test_output, hidden = rnn(test_x[:, i], hidden)
+            pred_y = torch.max(test_output, 1)[1].data.numpy().squeeze()
+            accuracy = sum(pred_y == test_y.reshape(-1,)) / float(test_y.size)
+            H['acc'].append(accuracy)
+            print('Epoch: ', epoch + step*len(b_x)/2000., '| train loss: %.4f' % loss.data[0], '| test accuracy: %.2f' % accuracy)
+            
+plt.title("Simple(0.01)")
+plt.plot(H['acc'])
+plt.xlabel("Epoch")
+plt.ylabel("Training accuracy")
+plt.savefig("10a_1.png")
+thidden = rnn.initHidden(test_x.size()[0])
+for i in range(test_x.size()[1]):
+    ttest_output, thidden = rnn(test_x[:, i], thidden)
+pred_y = torch.max(ttest_output, 1)[1].data.numpy().squeeze()
+print(pred_y, 'prediction number')
+print(test_y[:10], 'real number')
 ###############################################################################
 H = defaultdict(list)
 
