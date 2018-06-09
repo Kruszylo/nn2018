@@ -1,0 +1,1 @@
+{"a": "0.1", "b": "Yes, probably model is over-fitting", "c": "70", "d": "On smaller data (small batch) model tries to be simplier, and hight lr increase steps size in searcing of local extremas"}
