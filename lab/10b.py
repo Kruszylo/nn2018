@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue May 29 09:32:43 2018
-
-@author: Maxim
-"""
 
 import torch
 from torch import nn
@@ -23,7 +17,7 @@ import matplotlib.pylab as plt
 
 # Hyper Parameters (constant for the notebook)
 EPOCH = 1               # train the training data n times, to save time, we just train 1 epoch
-BATCH_SIZE = 64
+BATCH_SIZE = 60
 LR = 0.001
 TIME_STEP = 28          # rnn time step / image height
 INPUT_SIZE = 28         # rnn input size / image width
@@ -75,13 +69,34 @@ class LSTMCell(Module):
         # Compute input (i), forget (f), g (marked as \tilde{C_t} in Colah), output (o),
         # state (c) and hidden state (h)
         # For reference see http://colah.github.io/posts/2015-08-Understanding-LSTMs/ 
-        i = nn.Sigmoid( self.weight_ih * torch.cat((h,input),0) + self.bias_ih )
-        f = nn.Sigmoid( w_f * torch.cat((h,input),0) + b_f )
-        o = nn.Sigmoid( w_o * torch.cat((h,input),0) + b_o )
-        g = nn.Tanh( w_c * torch.cat((h,input),0) + b_c  )
-        c = f*c + i*g #f*c_t-1 + i*g
-        h = o * nn.Tanh( c )
-        return h, c
+        #m1 = torch.cat( 
+        #                        (self.weight_ih[:self.hidden_size,:], 
+        #                        self.weight_hh[:self.hidden_size,:]),1
+        #                        )
+        #m2 = torch.cat((h,input),1).transpose(0,1)
+        #print(h.t().size(),input.t().size(),self.bias.size())
+        i = F.sigmoid( torch.mm(self.weight_ih[:self.hidden_size,:], input.t()) + torch.mm(self.weight_hh[:self.hidden_size,:], h.t()) + self.bias[0] )
+        f = F.sigmoid( 
+                
+                        torch.mm(self.weight_ih[self.hidden_size:self.hidden_size*2,:], input.t()) + 
+                                torch.mm(self.weight_hh[self.hidden_size:self.hidden_size*2,:],h.t())
+                                 + self.bias[1]  
+                                )
+        o = F.sigmoid( 
+                
+                        torch.mm(self.weight_ih[self.hidden_size*2:self.hidden_size*3,:], input.t()) + 
+                                torch.mm(self.weight_hh[self.hidden_size*2:self.hidden_size*3,:],h.t())
+                                 + self.bias[2]
+                                )
+        g = F.tanh( 
+                
+                        torch.mm(self.weight_ih[self.hidden_size*3:self.hidden_size*4,:], input.t()) + 
+                                torch.mm(self.weight_hh[self.hidden_size*3:self.hidden_size*4,:],h.t())
+                                 + self.bias[3] 
+                                )
+        c = f*c.t() + i*g #f*c_t-1 + i*g
+        h = (o * F.tanh( c.t() ).t()).t()
+        return h, c.t()
     
         return self._backend.LSTMCell(
             input, hx,
@@ -105,8 +120,7 @@ class LSTM(Module):
 
         kwargs = {'input_size': input_size,
                   'hidden_size': hidden_size,
-                  'bias': bias,
-                  'grad_clip': grad_clip}
+                  'bias': bias}
 
         self.cell0 = Cell(**kwargs)
         
@@ -161,6 +175,7 @@ for epoch in range(EPOCH):
         optimizer.step()                                # apply gradients
 
         if step % 50 == 0:
+            print("die!")
             hidden, state = rnn.forward(test_x)
             test_output = clf.forward(hidden)
             pred_y = torch.max(test_output, 1)[1].data.numpy().squeeze()

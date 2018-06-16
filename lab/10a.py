@@ -158,7 +158,7 @@ for epoch in range(EPOCH):
         
         # Save ||dL/dh_i||
         dLdhi = []
-        for h in hiddens:
+        for h in hiddens[1:]:
             g = h.grad.data.numpy()
             dLdhi.append(np.linalg.norm(g)) # Hint: Just compute ||dL/dh_i|| from h.grad.data.numpy() using np.linalg.norm + average over examples
         
